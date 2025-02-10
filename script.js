@@ -13,17 +13,18 @@ let vw, vh, clampX, clampY, worldWidth, worldHeight;
 let scrollTweenObject;
 
 function generatePath() {
-    let d = "";
-    sections.forEach((section, i) => {
-      const rect = section.getBoundingClientRect();
-      const x = rect.left + rect.width / 2;
-      const y = rect.top + rect.height / 2 + window.scrollY
+  let d = "";
+  sections.forEach((section, i) => {
+    const rect = section.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
 
-      // need to make this a bezier curve instead of straight line
-      d += i === 0 ? `M${x},${y}` : ` L${x},${y}`;
-    });
+    // need to make this a bezier curve instead of straight line
+    d += i === 0 ? `M${x},${y}` : ` L${x},${y}`;
+    // d += i === 0 ? `M${x},${y}` : `C 20 40, 20 40, ${x} ${y}`
+  });
 
-    scrollPath.setAttribute("d", d);
+  scrollPath.setAttribute("d", d);
 }
 
 function createScrollTween() {
@@ -35,7 +36,7 @@ function createScrollTween() {
       scrub: true,
       markers: true,
       // this seems to be cutting off too short
-      end: "+=" + world.offsetHeight
+      end: "+=" + world.offsetHeight,
     },
     motionPath: {
       path: scrollPath,
@@ -43,7 +44,7 @@ function createScrollTween() {
       alignOrigin: [0.5, 0.5],
       // why is this in reverse?
       start: 1,
-      end: 0
+      end: 0,
     },
     ease: "linear",
     onUpdate: () => {
@@ -52,7 +53,7 @@ function createScrollTween() {
       setOrigin(`${x}px ${y}px`);
       setX(-clampX(x - vw / 2));
       setY(-clampY(y - vh / 2));
-    }
+    },
   });
 }
 
